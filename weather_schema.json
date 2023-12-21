@@ -1,0 +1,353 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [
+        "location",
+        "current"
+    ],
+    "properties": {
+        "location": {
+            "type": "object",
+            "default": {},
+            "title": "The location Schema",
+            "required": [
+                "name",
+                "region",
+                "country",
+                "lat",
+                "lon",
+                "tz_id",
+                "localtime_epoch",
+                "localtime"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The name Schema",
+                    "examples": [
+                        "Kabul"
+                    ]
+                },
+                "region": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The region Schema",
+                    "examples": [
+                        "Kabol"
+                    ]
+                },
+                "country": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The country Schema",
+                    "examples": [
+                        "Afghanistan"
+                    ]
+                },
+                "lat": {
+                    "type": "number",
+                    "default": 0.0,
+                    "title": "The lat Schema",
+                    "examples": [
+                        34.52
+                    ]
+                },
+                "lon": {
+                    "type": "number",
+                    "default": 0.0,
+                    "title": "The lon Schema",
+                    "examples": [
+                        69.18
+                    ]
+                },
+                "tz_id": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The tz_id Schema",
+                    "examples": [
+                        "Asia/Kabul"
+                    ]
+                },
+                "localtime_epoch": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "The localtime_epoch Schema",
+                    "examples": [
+                        1703185429
+                    ]
+                },
+                "localtime": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The localtime Schema",
+                    "examples": [
+                        "2023-12-21 23:33"
+                    ]
+                }
+            },
+            "examples": [{
+                "name": "Kabul",
+                "region": "Kabol",
+                "country": "Afghanistan",
+                "lat": 34.52,
+                "lon": 69.18,
+                "tz_id": "Asia/Kabul",
+                "localtime_epoch": 1703185429,
+                "localtime": "2023-12-21 23:33"
+            }]
+        },
+        "current": {
+            "type": "object",
+            "default": {},
+            "title": "The current Schema",
+            "required": [
+                "last_updated_epoch",
+                "last_updated",
+                "temp_c",
+                "temp_f",
+                "is_day",
+                "condition",
+                "wind_mph",
+                "wind_kph",
+                "wind_degree",
+                "wind_dir",
+                "pressure_mb",
+                "pressure_in",
+                "precip_mm",
+                "precip_in",
+                "humidity",
+                "cloud",
+                "feelslike_c",
+                "feelslike_f",
+                "vis_km",
+                "vis_miles",
+                "uv",
+                "gust_mph",
+                "gust_kph"
+            ],
+            "properties": {
+                "last_updated_epoch": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "The last_updated_epoch Schema",
+                    "examples": [
+                        1703185200
+                    ]
+                },
+                "last_updated": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The last_updated Schema",
+                    "examples": [
+                        "2023-12-21 23:30"
+                    ]
+                },
+                "temp_c": {
+                    "type": "number",
+                    "default": 0.0,
+                    "title": "The temp_c Schema",
+                    "examples": [
+                        2.7
+                    ]
+                },
+                "temp_f": {
+                    "type": "number",
+                    "default": 0.0,
+                    "title": "The temp_f Schema",
+                    "examples": [
+                        36.9
+                    ]
+                },
+                "is_day": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "The is_day Schema",
+                    "examples": [
+                        0
+                    ]
+                },
+                "condition": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The condition Schema",
+                    "required": [
+                        "text",
+                        "icon",
+                        "code"
+                    ],
+                    "properties": {
+                        "text": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The text Schema",
+                            "examples": [
+                                "Partly cloudy"
+                            ]
+                        },
+                        "icon": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The icon Schema",
+                            "examples": [
+                                "//cdn.weatherapi.com/weather/64x64/night/116.png"
+                            ]
+                        },
+                        "code": {
+                            "type": "integer",
+                            "default": 0,
+                            "title": "The code Schema",
+                            "examples": [
+                                1003
+                            ]
+                        }
+                    },
+                    "examples": [{
+                        "text": "Partly cloudy",
+                        "icon": "//cdn.weatherapi.com/weather/64x64/night/116.png",
+                        "code": 1003
+                    }]
+                },
+                "wind_mph": {
+                    "type": "number",
+                    "default": 0.0,
+                    "title": "The wind_mph Schema",
+                    "examples": [
+                        2.2
+                    ]
+                },
+                "wind_kph": {
+                    "type": "number",
+                    "default": 0.0,
+                    "title": "The wind_kph Schema",
+                    "examples": [
+                        3.6
+                    ]
+                },
+                "wind_degree": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "The wind_degree Schema",
+                    "examples": [
+                        205
+                    ]
+                },
+                "wind_dir": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The wind_dir Schema",
+                    "examples": [
+                        "SSW"
+                    ]
+                },
+                "pressure_mb": {
+                    "type": "number",
+                    "default": 0.0,
+                    "title": "The pressure_mb Schema",
+                    "examples": [
+                        1021.0
+                    ]
+                },
+                "pressure_in": {
+                    "type": "number",
+                    "default": 0.0,
+                    "title": "The pressure_in Schema",
+                    "examples": [
+                        30.16
+                    ]
+                },
+                "precip_mm": {
+                    "type": "number",
+                    "default": 0.0,
+                    "title": "The precip_mm Schema",
+                    "examples": [
+                        0.0
+                    ]
+                },
+                "precip_in": {
+                    "type": "number",
+                    "default": 0.0,
+                    "title": "The precip_in Schema",
+                    "examples": [
+                        0.0
+                    ]
+                },
+                "humidity": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "The humidity Schema",
+                    "examples": [
+                        29
+                    ]
+                },
+                "cloud": {
+                    "type": "integer",
+                    "default": 0,
+                    "title": "The cloud Schema",
+                    "examples": [
+                        32
+                    ]
+                },
+                "feelslike_c": {
+                    "type": "number",
+                    "default": 0.0,
+                    "title": "The feelslike_c Schema",
+                    "examples": [
+                        2.2
+                    ]
+                },
+                "feelslike_f": {
+                    "type": "number",
+                    "default": 0.0,
+                    "title": "The feelslike_f Schema",
+                    "examples": [
+                        36.0
+                    ]
+                },
+                "vis_km": {
+                    "type": "number",
+                    "default": 0.0,
+                    "title": "The vis_km Schema",
+                    "examples": [
+                        10.0
+                    ]
+                },
+                "vis_miles": {
+                    "type": "number",
+                    "default": 0.0,
+                    "title": "The vis_miles Schema",
+                    "examples": [
+                        6.0
+                    ]
+                },
+                "uv": {
+                    "type": "number",
+                    "default": 0.0,
+                    "title": "The uv Schema",
+                    "examples": [
+                        1.0
+                    ]
+                },
+                "gust_mph": {
+                    "type": "number",
+                    "default": 0.0,
+                    "title": "The gust_mph Schema",
+                    "examples": [
+                        4.7
+                    ]
+                },
+                "gust_kph": {
+                    "type": "number",
+                    "default": 0.0,
+                    "title": "The gust_kph Schema",
+                    "examples": [
+                        7.6
+                    ]
+                }
+            }
+        }
+    }
+}
