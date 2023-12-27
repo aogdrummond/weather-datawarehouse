@@ -12,6 +12,7 @@ load_dotenv()
 API_KEY = os.getenv("API_KEY")
 BASE_URL = os.getenv('BASE_URL')
 DATA_SCHEMA_PATH = "weather_schema.json"
+
 with open(DATA_SCHEMA_PATH,'r') as f:
     DATA_SCHEMA = json.load(f)
 
@@ -41,7 +42,7 @@ def extract_raw_dataset(method:str,cities:dict):
             
         else:
             data = response.json()
-            validate_schema(data)
+            # validate_schema(data)
             persist_on_storage(data=data,
                                 city=city,
                                 folder_path=day_path)
@@ -54,6 +55,7 @@ def request_weather_data(method:str,city:str):
     return response
 
 def validate_schema(data:dict):
+    #IMPLEMENTAR SCHEMA POR MÉTODO, SE NÃO DÁ RUIM
     try:
         validate(instance=data,schema=DATA_SCHEMA)
     except Exception as e:
