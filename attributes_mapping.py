@@ -1,0 +1,25 @@
+COLS_MAPPING = {'current':{'current':{'cloud':'cloud',
+                'condition':'condition',
+                'feelslike_c':'feelslike_C',
+                'gust_kph':'gust_kph',
+                'humidity':'humidity',
+                'is_day':'is_day',
+                'last_updated':'last_updated',
+                'precip_mm':'precip_mm',
+                'pressure_in':'pressure_in',
+                'temp_c':'temp_C',
+                'uv':'uv',
+                'vis_km':'vis_km',
+                'wind_degree':'wind_degree',
+                'wind_dir':'wind_dir',
+                'wind_kph':'wind_kph'},
+                'location':{'country':'country',
+                'name':'city',
+                'region':'region',
+                'lat':'lat',
+                'lon':'long',
+                'localtime':'localtime',
+                'tz_id':'tz_id'}}}
+
+
+METHODS = ['current','astronomy','marine','sports']
