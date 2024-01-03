@@ -1,59 +1,65 @@
 import os
 import json
 from datetime import datetime
+from attributes_mapping import COLS_MAPPING, METHODS
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import udf, col, to_timestamp, array
+from pyspark.sql.functions import udf, col, to_timestamp
 from pyspark.sql.types import BooleanType
 
-SAVE_PATH = 'storage/processed/current'
-LOAD_PATH = 'storage/raw/current'
+LOAD_ROOT_PATH = 'storage/raw'
+SAVE_ROOT_PATH = 'storage/processed'
+DATE = datetime.strftime(datetime.now(),'%Y%m%d')
+
+#Include logging and replace prints
 
 def transform_raw_data(spark):
-    date = datetime.strftime(datetime.now(),'%Y%m%d')
-    files_path = f"{LOAD_PATH}/{date}"
-    current_df = spark.read.option("multiline","true").json(files_path)
-    flatten_df = current_df.select(assemble_flattening_query())
-    transformed_df = flatten_df.withColumn('last_updated_dttm',to_timestamp("last_updated"))\
-                                .withColumn('localtime_dttm',to_timestamp('localtime'))    
-    udf_ident_verification = udf(verify_if_is_identifiable, BooleanType())
-    filtering_df = transformed_df.withColumn("is_identifiable", udf_ident_verification(col("city"), col("lat"), col("long")))
-    filtered_df = filtering_df.where('is_identifiable = True')
-    trimmed_df = filtered_df.select(assemble_trimming_query())
-    #Criar amostra pra checar a filtragem    
-    save_as_json(trimmed_df)
+    
+    for method in METHODS:
+        try:
+            print(f'Transforming method {method}.')
+            files_path = f"{LOAD_ROOT_PATH}/{method}/{DATE}"
+            if not os.path.exists(files_path):
+                print(f'Dataset in {files_path} does not exist')
+                continue
+            original_df = load_dataframe(spark,files_path)
+            final_df = process_dataframe(original_df,method)
+            #Criar amostra pra checar a filtragem    
+            save_as_json(final_df,method)
+        except Exception as e:
+            print(e)
+            print(f'Raised exception for method {method}.')
+    print(f'Transformation finished for data in {DATE}.')
 
-def assemble_flattening_query():
+def load_dataframe(spark,files_path):
+    try:
+        original_df = spark.read.option("multiline","true").json(files_path)
+        return original_df
+    except Exception as e:
+        print(e)
+        print('The dataframe could not be loaded')
+
+def process_dataframe(df,method):
     """
-    Flatten DataFrame, keeping only required columns as set in the dictionary "cols_mapping"
+    """
+    if method == 'current':
+        flatten_df = df.select(assemble_flattening_query(method))
+        transformed_df = flatten_df.withColumn('last_updated_dttm',to_timestamp("last_updated"))\
+                                .withColumn('localtime_dttm',to_timestamp('localtime'))    
+        udf_ident_verification = udf(verify_if_is_identifiable, BooleanType())
+        filtering_df = transformed_df.withColumn("is_identifiable", udf_ident_verification(col("city"), col("lat"), col("long")))
+        filtered_df = filtering_df.where('is_identifiable = True')
+        final_df = filtered_df.select(trim_current_query())
+    return final_df
+
+
+def assemble_flattening_query(method:str):
+    """
+    Flatten DataFrame, keeping only required columns as set in the dictionary "COLS_MAPPING"
     """
     aliased_cols = []
-    for column in cols_mapping.keys():
-        aliased_cols += [col(f'{column}.{subcol}').alias(cols_mapping[column][subcol]) for subcol in cols_mapping[column].keys()]
+    for column in COLS_MAPPING[method].keys():
+        aliased_cols += [col(f'{column}.{subcol}').alias(COLS_MAPPING[method][column][subcol]) for subcol in COLS_MAPPING[method][column].keys()]
     return aliased_cols
-
-cols_mapping = {'current':{'cloud':'cloud',
-                'condition':'condition',
-                'feelslike_c':'feelslike_C',
-                'gust_kph':'gust_kph',
-                'humidity':'humidity',
-                'is_day':'is_day',
-                'last_updated':'last_updated',
-                'precip_mm':'precip_mm',
-                'pressure_in':'pressure_in',
-                'temp_c':'temp_C',
-                'uv':'uv',
-                'vis_km':'vis_km',
-                'wind_degree':'wind_degree',
-                'wind_dir':'wind_dir',
-                'wind_kph':'wind_kph'},
-                'location':{'country':'country',
-                'name':'city',
-                'region':'region',
-                'lat':'lat',
-                'lon':'long',
-                'localtime':'localtime',
-                'tz_id':'tz_id'}}
-
 
 def verify_if_is_identifiable(city,lat,long):
 
@@ -64,7 +70,7 @@ def verify_if_is_identifiable(city,lat,long):
         is_identifiable = True
     return is_identifiable
 
-def assemble_trimming_query():
+def trim_current_query():
     
     return [col('cloud'),col('condition.text').alias('condition'),col('condition.code').alias('condition_code'),
             col('feelslike_C'),col('gust_kph'),col('humidity'),col('is_day'),col('last_updated_dttm').alias('last_updated'),
@@ -73,30 +79,28 @@ def assemble_trimming_query():
             col('tz_id')]
 
 
-def save_as_json(df):
+def save_as_json(df,method):
     json_data = df.toJSON().collect()
-    [save_row(row) for row in json_data]
+    [save_row(row,method) for row in json_data]
 
-def save_row(row:str):
+def save_row(row:str,method):
 
     json_sample = json.loads(row)
     city = json_sample['city']
-    #Encontrar solução melhor para isso aqui, já que tá pegando o instante
-    #atual ao invés do date de extração raw
-    date = datetime.strftime(datetime.now(),'%Y%m%d')
-    create_daily_dir(date)
-    file_name = f"{SAVE_PATH}/{date}/{city}.json"
+    create_daily_dir(method)
+    file_name = f"{SAVE_ROOT_PATH}/{method}/{DATE}/{city}.json"
     with open(file_name,'w') as f:
         json.dump(json_sample,f)
         print(f'Saving processed {city}.')
 
-def create_daily_dir(date):
-    dir_path = f"{SAVE_PATH}/{date}"
+def create_daily_dir(method):
+    dir_path = f"{SAVE_ROOT_PATH}/{method}/{DATE}"
     if not os.path.exists(dir_path):
         os.mkdir(dir_path)
         print('Daily directory created.')
 
 
 if __name__ == "__main__":
+    
     spark = SparkSession.builder.appName('Spark download app').config('','').getOrCreate()
     transform_raw_data(spark)
