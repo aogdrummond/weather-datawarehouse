@@ -1,5 +1,6 @@
 import os
 import json
+from logger_config import setup_logging
 from datetime import datetime
 from typing import List, Union
 from attributes_mapping import COLS_MAPPING, METHODS
@@ -7,7 +8,8 @@ from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import udf, col, to_timestamp
 from pyspark.sql.types import BooleanType
 
-
+logger = setup_logging(__name__)
+logger.propagate = False
 LOAD_ROOT_PATH: str = 'storage/raw'
 SAVE_ROOT_PATH: str = 'storage/processed'
 DATE: str = datetime.strftime(datetime.now(), '%Y%m%d')
@@ -17,18 +19,18 @@ def transform_raw_data(spark: SparkSession) -> None:
     """Transforms raw data for different methods."""
     for method in METHODS:
         try:
-            print(f'Transforming method {method}.')
+            logger.info(f'Transforming method {method}.')
             files_path = f"{LOAD_ROOT_PATH}/{method}/{DATE}"
             if not os.path.exists(files_path):
-                print(f'Dataset in {files_path} does not exist')
+                logger.info(f'Dataset in {files_path} does not exist')
                 continue
             original_df = load_dataframe(spark, files_path)
             final_df = process_dataframe(original_df, method)
             save_as_json(final_df, method)
         except Exception as e:
-            print(e)
-            print(f'Raised exception for method {method}.')
-    print(f'Transformation finished for data in {DATE}.')
+            logger.error(e)
+            logger.error(f'Raised exception for method {method}.')
+    logger.info(f'Transformation finished for data in {DATE}.')
 
 
 def load_dataframe(spark: SparkSession, files_path: str) -> DataFrame:
@@ -37,8 +39,8 @@ def load_dataframe(spark: SparkSession, files_path: str) -> DataFrame:
         original_df = spark.read.option("multiline", "true").json(files_path)
         return original_df
     except Exception as e:
-        print(e)
-        print('The dataframe could not be loaded')
+        logger.error(e)
+        logger.error('The dataframe could not be loaded')
 
 
 def process_dataframe(df: DataFrame, method: str) -> DataFrame:
@@ -105,7 +107,7 @@ def save_row(row: str, method: str) -> None:
     file_name = f"{SAVE_ROOT_PATH}/{method}/{DATE}/{city}.json"
     with open(file_name, 'w') as f:
         json.dump(json_sample, f)
-        print(f'Saving processed {city}.')
+        logger.info(f'Saving processed {city}.')
 
 
 def create_daily_dir(method: str) -> None:
@@ -113,7 +115,7 @@ def create_daily_dir(method: str) -> None:
     dir_path = f"{SAVE_ROOT_PATH}/{method}/{DATE}"
     if not os.path.exists(dir_path):
         os.mkdir(dir_path)
-        print('Daily directory created.')
+        logger.info('Daily directory created.')
 
 
 if __name__ == "__main__":
