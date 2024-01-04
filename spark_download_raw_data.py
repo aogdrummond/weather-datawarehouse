@@ -2,11 +2,15 @@
 import os
 import json
 import requests
+from logger_config import setup_logging
 from datetime import datetime
 from typing import List, Tuple, Dict
 from pyspark.sql.functions import udf, col, explode
 from pyspark.sql.types import StructType, StructField, StringType, ArrayType
-from pyspark.sql import Row, SparkSession
+from pyspark.sql import Row
+
+
+logger = setup_logging(__name__)
 
 API_KEY = os.getenv("API_KEY")
 BASE_URL = os.getenv('BASE_URL')
@@ -30,7 +34,7 @@ def download_live_weather_data(spark) -> None:
 
     except Exception as e:
         # Proper exception handling to be added
-        print(e)
+        logger.error(e)
 
 def executeRestApiAndSave(method: str, city: str) -> None:
     """Execute REST API request and save data."""
@@ -40,7 +44,7 @@ def executeRestApiAndSave(method: str, city: str) -> None:
     response = requests.get(url=FINAL_URL)
 
     if response.status_code != 200:
-        print('An error occurred!')
+        logger.error('An error occurred!')
         return
 
     data = response.json()
@@ -54,14 +58,14 @@ def check_required_folder(path: str) -> None:
     """Check and create folder if it doesn't exist."""
     if not os.path.isdir(path):
         os.mkdir(path)
-        print(f'Folder {path} created.')
+        logger.info(f'Folder {path} created.')
 
 def persist_on_storage(data: Dict[str, str], city: str, folder_path: str) -> None:
     """Persist data on storage."""
     file_path = f'{folder_path}/{city}.json'
     with open(file_path, 'w') as f:
         json.dump(data, f)
-        print(f'{city} data saved.')
+        logger.info(f'{city} data saved.')
 
 def assemble_request_rows() -> List[Tuple[str, str]]:
     """Assemble rows for REST API requests."""
