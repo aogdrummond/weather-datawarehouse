@@ -1,19 +1,18 @@
 import os
 import json
-from logger_config import setup_logging
+from .logger_config import setup_logging
 from datetime import datetime
-from typing import List, Union
-from attributes_mapping import COLS_MAPPING, METHODS
+from typing import List
+from schemas.attributes_mapping import COLS_MAPPING, METHODS
 from pyspark.sql import SparkSession, DataFrame
-from pyspark.sql.functions import udf, col, to_timestamp
-from pyspark.sql.types import BooleanType
+from pyspark.sql.functions import col, to_timestamp
+
 
 logger = setup_logging(__name__)
 logger.propagate = False
 LOAD_ROOT_PATH: str = 'storage/raw'
 SAVE_ROOT_PATH: str = 'storage/processed'
 DATE: str = datetime.strftime(datetime.now(), '%Y%m%d')
-
 
 def transform_raw_data(spark: SparkSession) -> None:
     """Transforms raw data for different methods."""
@@ -49,11 +48,10 @@ def process_dataframe(df: DataFrame, method: str) -> DataFrame:
         flatten_df = df.select(assemble_flattening_query(method))
         transformed_df = flatten_df.withColumn('last_updated_dttm', to_timestamp("last_updated")) \
             .withColumn('localtime_dttm', to_timestamp('localtime'))
-        udf_ident_verification = udf(verify_if_is_identifiable, BooleanType())
-        filtering_df = transformed_df.withColumn("is_identifiable", udf_ident_verification(col("city"), col("lat"),
-                                                                                          col("long")))
+        filtering_df = transformed_df.selectExpr('*',check_subquery())
         filtered_df = filtering_df.where('is_identifiable = True')
         final_df = filtered_df.select(trim_current_query())
+        
     if method == 'astronomy':
         raise NotImplementedError(f'Method {method} not implemented yet.')
     if method == 'marine':
@@ -71,16 +69,9 @@ def assemble_flattening_query(method: str) -> List:
                          for subcol in COLS_MAPPING[method][column].keys()]
     return aliased_cols
 
-
-def verify_if_is_identifiable(city: Union[str, None], lat: Union[float, None], long: Union[float, None]) -> bool:
-    """Verify if location is identifiable."""
-    is_identifiable = False
-    if city is not None:
-        is_identifiable = True
-    elif lat is not None and long is not None:
-        is_identifiable = True
-    return is_identifiable
-
+def check_subquery():
+    subquery = 'NOT (city IS NULL AND (lat IS NULL OR long IS NULL)) AS is_identifiable'
+    return subquery
 
 def trim_current_query() -> List:
     """Trim the current query and select necessary columns."""
