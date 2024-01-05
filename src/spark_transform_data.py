@@ -1,9 +1,9 @@
 import os
 import json
-from logger_config import setup_logging
+from .logger_config import setup_logging
 from datetime import datetime
 from typing import List, Union
-from attributes_mapping import COLS_MAPPING, METHODS
+from schemas.attributes_mapping import COLS_MAPPING, METHODS
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import udf, col, to_timestamp
 from pyspark.sql.types import BooleanType

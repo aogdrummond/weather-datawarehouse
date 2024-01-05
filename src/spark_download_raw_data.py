@@ -2,7 +2,7 @@
 import os
 import json
 import requests
-from logger_config import setup_logging
+from .logger_config import setup_logging
 from datetime import datetime
 from typing import List, Tuple, Dict
 from pyspark.sql.functions import udf, col, explode
