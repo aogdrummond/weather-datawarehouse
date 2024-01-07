@@ -1,17 +1,19 @@
 import os
 import json
-from .logger_config import setup_logging
-from datetime import datetime
 from typing import List
-from schemas.attributes_mapping import COLS_MAPPING, METHODS
+from datetime import datetime
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import col, to_timestamp
+from .logger_config import setup_logging
+from .spark_utils import load_dataframe
+from schemas.attributes_mapping import COLS_MAPPING, METHODS
 
 
 logger = setup_logging(__name__)
 logger.propagate = False
-LOAD_ROOT_PATH: str = 'storage/raw'
-SAVE_ROOT_PATH: str = 'storage/processed'
+
+LOAD_ROOT_PATH: str = os.getenv('RAW_PATH')
+SAVE_ROOT_PATH: str = os.getenv('PROCESSED_PATH')
 DATE: str = datetime.strftime(datetime.now(), '%Y%m%d')
 
 def transform_raw_data(spark: SparkSession) -> None:
@@ -30,17 +32,6 @@ def transform_raw_data(spark: SparkSession) -> None:
             logger.error(e)
             logger.error(f'Raised exception for method {method}.')
     logger.info(f'Transformation finished for data in {DATE}.')
-
-
-def load_dataframe(spark: SparkSession, files_path: str) -> DataFrame:
-    """Load the DataFrame from JSON files."""
-    try:
-        original_df = spark.read.option("multiline", "true").json(files_path)
-        return original_df
-    except Exception as e:
-        logger.error(e)
-        logger.error('The dataframe could not be loaded')
-
 
 def process_dataframe(df: DataFrame, method: str) -> DataFrame:
     """Process the DataFrame based on the method."""

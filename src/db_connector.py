@@ -24,6 +24,10 @@ class DbCursor:
             cursor (MySQLCursor): The MySQL cursor object for executing queries.
         """
         self.cursor = cursor
+        self.url = os.getenv('DB_URL')
+        self.driver = os.getenv('DB_DRIVER')
+        self.user = os.getenv('DB_USER')
+        self.password = os.getenv('DB_PASSWORD')
 
     def fetch_location(self,city,lat,long):
 

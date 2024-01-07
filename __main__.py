@@ -3,7 +3,7 @@ import os
 from pyspark.sql import  SparkSession
 from src.spark_download_raw_data import download_live_weather_data
 from src.spark_transform_data import transform_raw_data
-from src.insert_transformed_in_db import insert_data_in_db
+from src.spark_insert_data import insert_data_in_db
 JDBC_DRIVER_PATH = os.getenv('JDBC_DRIVER_PATH')
 
 def setup_spark_session() -> SparkSession:
