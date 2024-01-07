@@ -11,11 +11,12 @@ from pyspark.sql import Row
 
 
 logger = setup_logging(__name__)
+logger.propagate = False
 
 API_KEY = os.getenv("API_KEY")
 BASE_URL = os.getenv('BASE_URL')
 CITIES_JSON_PATH = os.getenv('CITIES_JSON_PATH')
-SAVE_PATH = 'storage/raw'
+SAVE_PATH = os.getenv('RAW_PATH')
 
 def download_live_weather_data(spark) -> None:
     """Download live weather data for specified cities using Spark DataFrame."""
