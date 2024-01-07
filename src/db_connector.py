@@ -31,6 +31,10 @@ class DbCursor:
 
     def fetch_location(self,city,lat,long):
 
+        if lat is None:
+            lat = "NULL"
+        if long is None:
+            long = "NULL"
         query = "SELECT id FROM locations WHERE (city = '{}') OR (lat = {} AND long = {});".format(city,lat,long)
         self.cursor.execute(query)
         result = self.cursor.fetchall()

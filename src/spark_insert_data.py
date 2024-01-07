@@ -6,7 +6,7 @@ from pyspark.sql.functions import col, when, udf, regexp_replace, current_timest
 from pyspark.sql.types import TimestampType, IntegerType
 from .db_connector import DbCursor
 from .logger_config import setup_logging
-from spark_utils import load_dataframe
+from .spark_utils import load_dataframe
 
 logger = setup_logging(__name__)
 logger.propagate = False
