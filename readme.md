@@ -1,4 +1,4 @@
-# Weather by Location Data Warehouse
+# Weather per location - Data Warehouse
 
 This project is being developed aiming to apply several current concepts and tools for Data Warehouse, expecting to generate value given the suggested source. Those tools include(but are not limited to): **Python**, **Pandas**, **PySpark**, **Apache Airflow**, **Database Design** and **AWS**.
 
