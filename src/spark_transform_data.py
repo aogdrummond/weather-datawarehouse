@@ -89,7 +89,7 @@ def save_row(row: str, method: str) -> None:
     file_name = f"{SAVE_ROOT_PATH}/{method}/{DATE}/{city}.json"
     with open(file_name, 'w') as f:
         json.dump(json_sample, f)
-        logger.info(f'Saving processed {city}.')
+        logger.info(f'Saving processed {city} "{method}".')
 
 
 def create_daily_dir(method: str) -> None:
@@ -98,8 +98,3 @@ def create_daily_dir(method: str) -> None:
     if not os.path.exists(dir_path):
         os.mkdir(dir_path)
         logger.info('Daily directory created.')
-
-
-if __name__ == "__main__":
-    spark = SparkSession.builder.appName('Spark download app').config('', '').getOrCreate()
-    transform_raw_data(spark)

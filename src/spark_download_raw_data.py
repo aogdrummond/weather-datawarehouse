@@ -53,7 +53,7 @@ def executeRestApiAndSave(method: str, city: str) -> None:
     check_required_folder(storage_path)
     path = storage_path + f'/{datetime.now().strftime("%Y%m%d")}'
     check_required_folder(path)
-    persist_on_storage(data, city, path)
+    persist_on_storage(data, city, path, method)
 
 def check_required_folder(path: str) -> None:
     """Check and create folder if it doesn't exist."""
@@ -61,12 +61,15 @@ def check_required_folder(path: str) -> None:
         os.mkdir(path)
         logger.info(f'Folder {path} created.')
 
-def persist_on_storage(data: Dict[str, str], city: str, folder_path: str) -> None:
+def persist_on_storage(data: Dict[str, str],
+                       city: str,
+                       folder_path: str,
+                       method: str) -> None:
     """Persist data on storage."""
     file_path = f'{folder_path}/{city}.json'
     with open(file_path, 'w') as f:
         json.dump(data, f)
-        logger.info(f'{city} data saved.')
+        logger.info(f'{city} "{method}" data saved.')
 
 def assemble_request_rows() -> List[Tuple[str, str]]:
     """Assemble rows for REST API requests."""
