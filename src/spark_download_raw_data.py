@@ -1,14 +1,13 @@
-
 import os
 import json
 import requests
-from .logger_config import setup_logging
-from datetime import datetime
 from typing import List, Tuple, Dict
 from pyspark.sql.functions import udf, col, explode
-from pyspark.sql.types import StructType, StructField, StringType, ArrayType
+from pyspark.sql.types import StructType
 from pyspark.sql import Row
-
+from .logger_config import setup_logging
+from .spark_utils import RAW_ROOT_PATH, DATE
+from schemas.pyspark_schemas import REQUEST_SCHEMA
 
 logger = setup_logging(__name__)
 logger.propagate = False
@@ -16,25 +15,20 @@ logger.propagate = False
 API_KEY = os.getenv("API_KEY")
 BASE_URL = os.getenv('BASE_URL')
 CITIES_JSON_PATH = os.getenv('CITIES_JSON_PATH')
-SAVE_PATH = os.getenv('RAW_PATH')
 
 def download_live_weather_data(spark) -> None:
     """Download live weather data for specified cities using Spark DataFrame."""
+    logger.info('Starting downloading script.')
     try:
-        schema = ArrayType(StructType([
-            StructField("method", StringType(), False),
-            StructField("city", StringType(), False),
-            StructField("result", StructType(), True)
-        ]))
-        udf_executeRestApi = udf(executeRestApiAndSave, schema)
-        RestApiRequestRows = assemble_request_rows()
-        request_df = spark.createDataFrame(RestApiRequestRows)
+        request_df = assemble_request_df(spark)
+        udf_executeRestApi = udf(executeRestApiAndSave, REQUEST_SCHEMA)
         result_df = request_df.withColumn("result", udf_executeRestApi(col("method"), col("city")))
         df = result_df.select(explode(col("result")).alias("results"))
-        df.select(collapse_columns(df.schema)).show()
+        df.select(collapse_columns(df.schema)).collect() # collect is faster but should not be 
+                                                         # used for very large datasets
+        logger.info('Downloading script finished succesfully.')
 
     except Exception as e:
-        # Proper exception handling to be added
         logger.error(e)
 
 def executeRestApiAndSave(method: str, city: str) -> None:
@@ -45,13 +39,13 @@ def executeRestApiAndSave(method: str, city: str) -> None:
     response = requests.get(url=FINAL_URL)
 
     if response.status_code != 200:
-        logger.error('An error occurred!')
+        logger.error(f'Error requesting {city} {method} data.')
         return
 
     data = response.json()
-    storage_path = f'{SAVE_PATH}/{method}'
+    storage_path = f'{RAW_ROOT_PATH}/{method}'
     check_required_folder(storage_path)
-    path = storage_path + f'/{datetime.now().strftime("%Y%m%d")}'
+    path = storage_path + f'/{DATE}'
     check_required_folder(path)
     persist_on_storage(data, city, path, method)
 
@@ -71,7 +65,7 @@ def persist_on_storage(data: Dict[str, str],
         json.dump(data, f)
         logger.info(f'{city} "{method}" data saved.')
 
-def assemble_request_rows() -> List[Tuple[str, str]]:
+def assemble_request_df(spark) -> List[Tuple[str, str]]:
     """Assemble rows for REST API requests."""
     with open(CITIES_JSON_PATH, 'r') as f:
         cities = json.load(f)
@@ -81,7 +75,9 @@ def assemble_request_rows() -> List[Tuple[str, str]]:
     RestApiRequestRows += [RestApiRequestRow("astronomy", city) for city in cities.values()]
     RestApiRequestRows += [RestApiRequestRow("marine", city) for city in cities.values()]
 
-    return RestApiRequestRows
+    request_df = spark.createDataFrame(RestApiRequestRows)
+
+    return request_df
 
 def collapse_columns(source_schema: StructType, columnFilter: str = None) -> List:
     """Collapse columns based on the specified filter."""

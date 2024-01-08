@@ -25,6 +25,7 @@ Explain the project's architecture, mentioning key components and their interact
 - Implement persistance on AWS S3
 - Implement consistency checkpoints
 - Implement AWS SNS to alarm error on consistency.
+- Implement other API methods
 - Develop module to analyse performance and look for bugs in .log file
 - Cover on tests
 

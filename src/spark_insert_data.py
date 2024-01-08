@@ -1,19 +1,14 @@
-import os
-from datetime import datetime
 from typing import Union
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import col, when, udf, regexp_replace, current_timestamp
 from pyspark.sql.types import TimestampType, IntegerType
 from .db_connector import DbCursor
 from .logger_config import setup_logging
-from .spark_utils import load_dataframe
+from .spark_utils import load_dataframe, assemble_files_path, PROCESSED_ROOT_PATH, DATE
 
 logger = setup_logging(__name__)
 logger.propagate = False
 dbcursor = DbCursor()
-
-LOAD_ROOT_PATH: str = os.getenv("PROCESSED_PATH")
-DATE: str = datetime.strftime(datetime.now(), "%Y%m%d")
 
 
 def insert_data_in_db(spark) -> None:
@@ -27,17 +22,20 @@ def insert_data_in_db(spark) -> None:
     Returns:
     - None
     """
+    logger.info('Database data insertion script initialized.')
     try:
-        files_path = f"{LOAD_ROOT_PATH}/current/{DATE}"
-        if not os.path.exists(files_path):
-            logger.info(f"Dataset in {files_path} does not exist")
+        method = 'current'
+        files_path, path_exists = assemble_files_path(PROCESSED_ROOT_PATH,method)
+        if not path_exists:
+            raise ValueError(f'Files path {files_path} does not exist')
         processed_df = load_dataframe(spark, files_path)
         locations_df = parse_locations_df(processed_df)
         persist_to_db(locations_df, "locations")
         weathers_df = parse_weathers_df(processed_df)
         persist_to_db(weathers_df, "weathers")
-
+        logger.info(f'Database insertion succesfully finished for execution {DATE}.')
     except Exception as e:
+        logger.error(f'Error on insertion of {method}.')
         logger.error(e)
 
 
