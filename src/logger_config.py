@@ -1,5 +1,7 @@
 import logging.config
+from datetime import datetime 
 
+DATE: str = datetime.strftime(datetime.now(), '%Y%m%d')
 
 def setup_logging(name):
     logger = logging.getLogger(name)
@@ -10,7 +12,7 @@ def setup_logging(name):
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
     console_handler.setFormatter(formatter)
-    file_handler = logging.FileHandler("./log/app.log")
+    file_handler = logging.FileHandler(f"./log/app_{DATE}.log")
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)

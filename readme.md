@@ -1,6 +1,6 @@
 # Weather per location - Data Warehouse
 
-This project is being developed aiming to apply several current concepts and tools for Data Warehouse, expecting to generate value given the suggested source. Those tools include(but are not limited to): **Python**, **Pandas**, **PySpark**, **Apache Airflow**, **Database Design** and **AWS**.
+This project is being developed by myself aiming to apply several current concepts and tools for Data Warehouse, expecting to generate value given the suggested source. Those tools include(but are not limited to): **Python**, **Pandas**, **PySpark**, **Apache Airflow**, **Database Design** and **AWS**.
 
 It is contemplated all the main components expected for an ETL process: raw data extraction from the source (in this case, consumption from an external API), data transformation and insertion to the data warehouse, aiming to obtain the called **Data Lakehouse**, given that it is expected to get positive features from both data warehouse and data lake models.
 
@@ -13,13 +13,22 @@ Explain the project's architecture, mentioning key components and their interact
 - **Database**: Local/AWS storage for raw and processed data and Postgres for the final data.
 - **Orchestration**: Schedule and data flow orchestration managed by Airflow.
 
-## Requirements [TO-DO]
+## Pending Tasks:
 
-- List the necessary dependencies and tools needed to run the project, including versions.
-  - Python (version)
-  - PySpark (version)
-  - Airflow (version)
-  - Any additional libraries or packages
+- ~~Download raw data from API~~
+- ~~Transform raw data~~
+- ~~Design Database~~
+- ~~Insert transformed data into database~~
+- Implement Airflow to orchestrate
+- Documentation
+- Implement all the tasks without spark to compare performance
+- Implement persistance on AWS S3
+- Implement consistency checkpoints
+- Implement AWS SNS to alarm error on consistency.
+- Implement other API methods
+- Develop module to analyse performance and look for bugs in .log file
+- Cover on tests
+
 
 ## Setup [TO-DO]
 
@@ -54,7 +63,6 @@ weather-datawarehouse/
 |
 ├── readme.md
 |
-|
 ├── storage/
 │   ├── raw/
 │   └── processed/
@@ -63,6 +71,9 @@ weather-datawarehouse/
 │   ├── live_weather_api.py
 │   ├── spark_download_raw_data.py
 │   ├── spark_transform_data.py
+│   ├── spark_transform_data.py
+│   ├── spark_utils.py
+│   ├── db_connector.py
 │   └── logger_config.py
 │
 ├── schemas/
@@ -111,6 +122,4 @@ Provide code snippets or examples for executing specific functionalities within 
 # Example code for fetching data from the API
 # ...
 ```
-## License
-
 
