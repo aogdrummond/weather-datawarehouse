@@ -1,15 +1,13 @@
 
 import os
 import json
-from dotenv import load_dotenv
 from datetime import datetime
 from pyspark.sql import SparkSession, DataFrame
-from .logger_config import setup_logging
+from src.logger_config import setup_logging
 logger = setup_logging(__name__)
 logger.propagate = False
-
+from dotenv import load_dotenv
 load_dotenv()
-
 DATE: str = datetime.strftime(datetime.now(), '%Y%m%d')
 RAW_ROOT_PATH: str = os.getenv('RAW_PATH')
 PROCESSED_ROOT_PATH: str = os.getenv('PROCESSED_PATH')
