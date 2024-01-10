@@ -6,9 +6,9 @@ from typing import List, Tuple, Dict
 from pyspark.sql.functions import udf, col, explode
 from pyspark.sql.types import StructType
 from pyspark.sql import Row
-from .logger_config import setup_logging
-from .spark_utils import RAW_ROOT_PATH, DATE
-from schemas.pyspark_schemas import REQUEST_SCHEMA
+from dags.src.logger_config import setup_logging
+from dags.src.spark_utils import RAW_ROOT_PATH, DATE
+from dags.schemas.pyspark_schemas import REQUEST_SCHEMA
 
 load_dotenv()
 logger = setup_logging(__name__)

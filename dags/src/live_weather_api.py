@@ -24,7 +24,6 @@ def download_live_weather_data():
             cities = json.load(f)
         [extract_raw_dataset(method,cities) for method in methods]
     except Exception as e:
-        #Tratamento de exceção para o dataset
         print(e)
 
 def extract_raw_dataset(method:str,cities:dict):
@@ -32,7 +31,7 @@ def extract_raw_dataset(method:str,cities:dict):
     """
     storage_path = f'storage/{method}'
     check_required_folder(storage_path)
-    day_path = storage_path + f'/{datetime.now().strftime("%Y%m%d")}'
+    day_path = storage_path + f'/{datetime.now().strftime("%Y%m%d%H%M")}'
     check_required_folder(day_path)
     
     for country,city in cities.items():
@@ -42,7 +41,7 @@ def extract_raw_dataset(method:str,cities:dict):
             
         else:
             data = response.json()
-            # validate_schema(data)
+            validate_schema(data,method)
             persist_on_storage(data=data,
                                 city=city,
                                 folder_path=day_path)
@@ -54,10 +53,11 @@ def request_weather_data(method:str,city:str):
     response = requests.get(url=FINAL_URL)
     return response
 
-def validate_schema(data:dict):
-    #IMPLEMENTAR SCHEMA POR MÉTODO, SE NÃO DÁ RUIM
+def validate_schema(data:dict,method:dict):
+    """"""
     try:
-        validate(instance=data,schema=DATA_SCHEMA)
+        if method == 'current':
+            validate(instance=data,schema=DATA_SCHEMA)
     except Exception as e:
         #INSERIR UMA TAG NO AIRFLOW PARA FLUXO NÃO CONTINUAR SE ISSO ACONTECER
         logging.error('There was error while validating the schema.')

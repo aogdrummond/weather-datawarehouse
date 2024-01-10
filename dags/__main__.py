@@ -1,9 +1,9 @@
 # from live_weather_api import download_live_weather_data
 import os
 from pyspark.sql import  SparkSession
-from src.spark_download_raw_data import download_live_weather_data
-from src.spark_transform_data import transform_raw_data
-from src.spark_insert_data import insert_data_in_db
+from dags.src.spark_download_raw_data import download_live_weather_data
+from dags.src.spark_transform_data import transform_raw_data
+from dags.src.spark_insert_data import insert_data_in_db
 JDBC_DRIVER_PATH = os.getenv('JDBC_DRIVER_PATH')
 
 def setup_spark_session() -> SparkSession:
