@@ -19,7 +19,7 @@ Explain the project's architecture, mentioning key components and their interact
 - ~~Transform raw data~~
 - ~~Design Database~~
 - ~~Insert transformed data into database~~
-- Implement Airflow to orchestrate
+- ~~Implement Airflow to orchestrate~~
 - Documentation
 - Implement all the tasks without spark to compare performance
 - Implement persistance on AWS S3
