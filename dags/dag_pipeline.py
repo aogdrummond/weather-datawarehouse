@@ -1,61 +1,63 @@
 import os
+import sys
+current_directory = os.path.abspath(os.path.dirname(__name__))
+sys.path.append(current_directory)
 from dotenv import load_dotenv
+
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from pyspark.sql import  SparkSession
-from src.spark_download_raw_data import download_live_weather_data
-from src.spark_transform_data import transform_raw_data
-from src.spark_insert_data import insert_data_in_db
+from dags.src.spark_download_raw_data import download_live_weather_data
+from dags.src.spark_transform_data import transform_raw_data
+from dags.src.spark_insert_data import insert_data_in_db
 load_dotenv()
 
 JDBC_DRIVER_PATH = os.getenv('JDBC_DRIVER_PATH')
 spark = SparkSession.builder.appName('Spark Data Warehouse app').config('spark.jars',JDBC_DRIVER_PATH).getOrCreate()
 
-DATE = str(datetime.now().date())
 # Define the functions to be executed by the PythonOperators
-def function1():
+def data_download():
     download_live_weather_data(spark)
 
-def function2():
+def data_transformation():
     transform_raw_data(spark)
 
-def function3():
+def data_insertion():
     insert_data_in_db(spark)
     
 # Define default arguments for the DAG
 default_args = {
     'owner': 'Airflow',
     'depends_on_past': False,
-    # 'start_date': datetime(2024, 1, 9),
+    'start_date': datetime(2024, 1, 10,20,25,0),
     'retries': 1,
-    'retry_delay': timedelta(minutes=5),
+    'retry_delay': timedelta(minutes=1),
 }
 
 # Create a DAG object
-dag = DAG('zubumafu',
+dag = DAG('complete_pipeline_execution',
           default_args=default_args,
-        #   schedule=timedelta(minutes=1)
-          )  # Run the DAG daily
-
+          schedule='*/5 * * * *'
+          ) 
 # Define PythonOperators that will execute the Python scripts sequentially
-execute_script1 = PythonOperator(
+download_task = PythonOperator(
     task_id='execute_script1',
-    python_callable=function1,  # Specify the function to be executed
+    python_callable=data_download,  # Specify the function to be executed
     dag=dag,
 )
 
-execute_script2 = PythonOperator(
+transformation_task = PythonOperator(
     task_id='execute_script2',
-    python_callable=function2,  # Specify the function to be executed
+    python_callable=data_transformation,  # Specify the function to be executed
     dag=dag,
 )
 
-execute_script3 = PythonOperator(
+insertion_task = PythonOperator(
     task_id='execute_script3',
-    python_callable=function3,  # Specify the function to be executed
+    python_callable=data_insertion,  # Specify the function to be executed
     dag=dag,
 )
 
 # Define the execution sequence using task dependencies
-execute_script1 >> execute_script2 >> execute_script3
+download_task >> transformation_task >> insertion_task

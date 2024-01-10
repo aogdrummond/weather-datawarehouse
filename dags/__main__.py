@@ -11,20 +11,6 @@ def setup_spark_session() -> SparkSession:
     spark = SparkSession.builder.appName('Spark Data Warehouse app').config('spark.jars',JDBC_DRIVER_PATH).getOrCreate()
     return spark
 
-
-def teste():
-    spark = setup_spark_session()
-    download_live_weather_data(spark)
-    
-def teste2():
-    spark = setup_spark_session()
-    transform_raw_data(spark)
-    
-def teste3():
-    
-    spark = setup_spark_session()
-    insert_data_in_db(spark)
-
 if __name__ == "__main__":
 
     spark = setup_spark_session()

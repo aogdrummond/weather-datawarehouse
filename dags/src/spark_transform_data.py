@@ -1,9 +1,9 @@
 from typing import List
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import col, to_timestamp
-from src.logger_config import setup_logging
-from src.spark_utils import load_dataframe, save_df_as_json, assemble_files_path, DATE, RAW_ROOT_PATH
-from schemas.attributes_mapping import COLS_MAPPING, METHODS
+from dags.src.logger_config import setup_logging
+from dags.src.spark_utils import load_dataframe, save_df_as_json, assemble_files_path, DATE, RAW_ROOT_PATH
+from dags.schemas.attributes_mapping import COLS_MAPPING, METHODS
 
 logger = setup_logging(__name__)
 logger.propagate = False
