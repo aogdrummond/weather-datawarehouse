@@ -79,7 +79,7 @@ weather-datawarehouse/
 ├── schemas/
 │   ├── attributes_mapping.py
 │   ├── cities.json
-│   └── weather_schema.json
+│   └── raw_schema.json
 |
 ├── log/
 │   └── app.log

@@ -11,7 +11,7 @@ import os
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
 BASE_URL = os.getenv('BASE_URL')
-DATA_SCHEMA_PATH = "weather_schema.json"
+DATA_SCHEMA_PATH = "raw_data_schema.json"
 
 with open(DATA_SCHEMA_PATH,'r') as f:
     DATA_SCHEMA = json.load(f)

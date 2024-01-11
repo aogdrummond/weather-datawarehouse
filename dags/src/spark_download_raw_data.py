@@ -2,6 +2,7 @@ import os
 import json
 import requests
 from dotenv import load_dotenv
+from jsonschema import validate
 from typing import List, Tuple, Dict
 from pyspark.sql.functions import udf, col, explode
 from pyspark.sql.types import StructType
@@ -17,6 +18,10 @@ logger.propagate = False
 API_KEY = os.getenv("API_KEY")
 BASE_URL = os.getenv('BASE_URL')
 CITIES_JSON_PATH = os.getenv('CITIES_JSON_PATH')
+RAW_SCHEMA_PATH = os.getenv('RAW_SCHEMA_PATH')
+
+with open(RAW_SCHEMA_PATH,'r') as f:
+    DATA_SCHEMA = json.load(f)
 
 def download_live_weather_data(spark) -> None:
     """Download live weather data for specified cities using Spark DataFrame."""
@@ -45,11 +50,24 @@ def executeRestApiAndSave(method: str, city: str) -> None:
         return
 
     data = response.json()
+    validate_schema(data,method)
     storage_path = f'{RAW_ROOT_PATH}/{method}'
     check_required_folder(storage_path)
     path = storage_path + f'/{DATE}'
     check_required_folder(path)
     persist_on_storage(data, city, path, method)
+
+def validate_schema(data:dict,method:dict):
+    """
+    Check if downloaded data's schema remains the same, warning
+    the user otherwise and interrupting the processing
+    """
+    try:
+        validate(instance=data,schema=DATA_SCHEMA[method])
+    except Exception as e:
+        logger.error('There was error while validating the schema.')
+        logger.error(f'Error message:{e}')
+
 
 def check_required_folder(path: str) -> None:
     """Check and create folder if it doesn't exist."""

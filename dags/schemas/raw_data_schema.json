@@ -1,0 +1,840 @@
+{
+    "current": {
+        "$schema": "https://json-schema.org/draft/2019-09/schema",
+        "$id": "http://example.com/example.json",
+        "type": "object",
+        "default": {},
+        "title": "Root Schema",
+        "required": [
+            "location",
+            "current"
+        ],
+        "properties": {
+            "location": {
+                "type": "object",
+                "default": {},
+                "title": "The location Schema",
+                "required": [
+                    "name",
+                    "region",
+                    "country",
+                    "lat",
+                    "lon",
+                    "tz_id",
+                    "localtime_epoch",
+                    "localtime"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The name Schema",
+                        "examples": [
+                            "Kabul"
+                        ]
+                    },
+                    "region": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The region Schema",
+                        "examples": [
+                            "Kabol"
+                        ]
+                    },
+                    "country": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The country Schema",
+                        "examples": [
+                            "Afghanistan"
+                        ]
+                    },
+                    "lat": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The lat Schema",
+                        "examples": [
+                            34.52
+                        ]
+                    },
+                    "lon": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The lon Schema",
+                        "examples": [
+                            69.18
+                        ]
+                    },
+                    "tz_id": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The tz_id Schema",
+                        "examples": [
+                            "Asia/Kabul"
+                        ]
+                    },
+                    "localtime_epoch": {
+                        "type": "integer",
+                        "default": 0,
+                        "title": "The localtime_epoch Schema",
+                        "examples": [
+                            1703185429
+                        ]
+                    },
+                    "localtime": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The localtime Schema",
+                        "examples": [
+                            "2023-12-21 23:33"
+                        ]
+                    }
+                },
+                "examples": [
+                    {
+                        "name": "Kabul",
+                        "region": "Kabol",
+                        "country": "Afghanistan",
+                        "lat": 34.52,
+                        "lon": 69.18,
+                        "tz_id": "Asia/Kabul",
+                        "localtime_epoch": 1703185429,
+                        "localtime": "2023-12-21 23:33"
+                    }
+                ]
+            },
+            "current": {
+                "type": "object",
+                "default": {},
+                "title": "The current Schema",
+                "required": [
+                    "last_updated_epoch",
+                    "last_updated",
+                    "temp_c",
+                    "temp_f",
+                    "is_day",
+                    "condition",
+                    "wind_mph",
+                    "wind_kph",
+                    "wind_degree",
+                    "wind_dir",
+                    "pressure_mb",
+                    "pressure_in",
+                    "precip_mm",
+                    "precip_in",
+                    "humidity",
+                    "cloud",
+                    "feelslike_c",
+                    "feelslike_f",
+                    "vis_km",
+                    "vis_miles",
+                    "uv",
+                    "gust_mph",
+                    "gust_kph"
+                ],
+                "properties": {
+                    "last_updated_epoch": {
+                        "type": "integer",
+                        "default": 0,
+                        "title": "The last_updated_epoch Schema",
+                        "examples": [
+                            1703185200
+                        ]
+                    },
+                    "last_updated": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The last_updated Schema",
+                        "examples": [
+                            "2023-12-21 23:30"
+                        ]
+                    },
+                    "temp_c": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The temp_c Schema",
+                        "examples": [
+                            2.7
+                        ]
+                    },
+                    "temp_f": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The temp_f Schema",
+                        "examples": [
+                            36.9
+                        ]
+                    },
+                    "is_day": {
+                        "type": "integer",
+                        "default": 0,
+                        "title": "The is_day Schema",
+                        "examples": [
+                            0
+                        ]
+                    },
+                    "condition": {
+                        "type": "object",
+                        "default": {},
+                        "title": "The condition Schema",
+                        "required": [
+                            "text",
+                            "icon",
+                            "code"
+                        ],
+                        "properties": {
+                            "text": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The text Schema",
+                                "examples": [
+                                    "Partly cloudy"
+                                ]
+                            },
+                            "icon": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The icon Schema",
+                                "examples": [
+                                    "//cdn.weatherapi.com/weather/64x64/night/116.png"
+                                ]
+                            },
+                            "code": {
+                                "type": "integer",
+                                "default": 0,
+                                "title": "The code Schema",
+                                "examples": [
+                                    1003
+                                ]
+                            }
+                        },
+                        "examples": [
+                            {
+                                "text": "Partly cloudy",
+                                "icon": "//cdn.weatherapi.com/weather/64x64/night/116.png",
+                                "code": 1003
+                            }
+                        ]
+                    },
+                    "wind_mph": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The wind_mph Schema",
+                        "examples": [
+                            2.2
+                        ]
+                    },
+                    "wind_kph": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The wind_kph Schema",
+                        "examples": [
+                            3.6
+                        ]
+                    },
+                    "wind_degree": {
+                        "type": "integer",
+                        "default": 0,
+                        "title": "The wind_degree Schema",
+                        "examples": [
+                            205
+                        ]
+                    },
+                    "wind_dir": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The wind_dir Schema",
+                        "examples": [
+                            "SSW"
+                        ]
+                    },
+                    "pressure_mb": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The pressure_mb Schema",
+                        "examples": [
+                            1021.0
+                        ]
+                    },
+                    "pressure_in": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The pressure_in Schema",
+                        "examples": [
+                            30.16
+                        ]
+                    },
+                    "precip_mm": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The precip_mm Schema",
+                        "examples": [
+                            0.0
+                        ]
+                    },
+                    "precip_in": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The precip_in Schema",
+                        "examples": [
+                            0.0
+                        ]
+                    },
+                    "humidity": {
+                        "type": "integer",
+                        "default": 0,
+                        "title": "The humidity Schema",
+                        "examples": [
+                            29
+                        ]
+                    },
+                    "cloud": {
+                        "type": "integer",
+                        "default": 0,
+                        "title": "The cloud Schema",
+                        "examples": [
+                            32
+                        ]
+                    },
+                    "feelslike_c": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The feelslike_c Schema",
+                        "examples": [
+                            2.2
+                        ]
+                    },
+                    "feelslike_f": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The feelslike_f Schema",
+                        "examples": [
+                            36.0
+                        ]
+                    },
+                    "vis_km": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The vis_km Schema",
+                        "examples": [
+                            10.0
+                        ]
+                    },
+                    "vis_miles": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The vis_miles Schema",
+                        "examples": [
+                            6.0
+                        ]
+                    },
+                    "uv": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The uv Schema",
+                        "examples": [
+                            1.0
+                        ]
+                    },
+                    "gust_mph": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The gust_mph Schema",
+                        "examples": [
+                            4.7
+                        ]
+                    },
+                    "gust_kph": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The gust_kph Schema",
+                        "examples": [
+                            7.6
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "astronomy": {
+        "$schema": "https://json-schema.org/draft/2019-09/schema",
+        "$id": "http://example.com/example.json",
+        "type": "object",
+        "default": {},
+        "title": "Root Schema",
+        "required": [
+            "location",
+            "astronomy"
+        ],
+        "properties": {
+            "location": {
+                "type": "object",
+                "default": {},
+                "title": "The location Schema",
+                "required": [
+                    "name",
+                    "region",
+                    "country",
+                    "lat",
+                    "lon",
+                    "tz_id",
+                    "localtime_epoch",
+                    "localtime"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The name Schema"
+                    },
+                    "region": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The region Schema"
+                    },
+                    "country": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The country Schema"
+                    },
+                    "lat": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The lat Schema"
+                    },
+                    "lon": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The lon Schema"
+                    },
+                    "tz_id": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The tz_id Schema"
+                    },
+                    "localtime_epoch": {
+                        "type": "integer",
+                        "default": 0,
+                        "title": "The localtime_epoch Schema"
+                    },
+                    "localtime": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The localtime Schema"
+                    }
+                }
+            },
+            "astronomy": {
+                "type": "object",
+                "default": {},
+                "title": "The astronomy Schema",
+                "properties": {
+                    "astro": {
+                        "type": "object",
+                        "default": {},
+                        "title": "The astro Schema",
+                        "required": [
+                            "sunrise",
+                            "sunset",
+                            "moonrise",
+                            "moonset",
+                            "moon_phase",
+                            "moon_illumination",
+                            "is_moon_up",
+                            "is_sun_up"
+                        ],
+                        "properties": {
+                            "sunrise": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The sunrise Schema"
+                            },
+                            "sunset": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The sunset Schema"
+                            },
+                            "moonrise": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The moonrise Schema"
+                            },
+                            "moonset": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The moonset Schema"
+                            },
+                            "moon_phase": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The moon_phase Schema"
+                            },
+                            "moon_illumination": {
+                                "type": "integer",
+                                "default": 0,
+                                "title": "The moon_illumination Schema"
+                            },
+                            "is_moon_up": {
+                                "type": "integer",
+                                "default": 0,
+                                "title": "The is_moon_up Schema"
+                            },
+                            "is_sun_up": {
+                                "type": "integer",
+                                "default": 0,
+                                "title": "The is_sun_up Schema"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "marine": {
+        "$schema": "https://json-schema.org/draft/2019-09/schema",
+        "$id": "http://example.com/example.json",
+        "type": "object",
+        "default": {},
+        "title": "Root Schema",
+        "required": [
+            "location",
+            "forecast"
+        ],
+        "properties": {
+            "location": {
+                "type": "object",
+                "default": {},
+                "title": "The location Schema",
+                "required": [
+                    "name",
+                    "region",
+                    "country",
+                    "lat",
+                    "lon",
+                    "tz_id",
+                    "localtime_epoch",
+                    "localtime"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The name Schema"
+                    },
+                    "region": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The region Schema"
+                    },
+                    "country": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The country Schema"
+                    },
+                    "lat": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The lat Schema"
+                    },
+                    "lon": {
+                        "type": "number",
+                        "default": 0.0,
+                        "title": "The lon Schema"
+                    },
+                    "tz_id": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The tz_id Schema"
+                    },
+                    "localtime_epoch": {
+                        "type": "integer",
+                        "default": 0,
+                        "title": "The localtime_epoch Schema"
+                    },
+                    "localtime": {
+                        "type": "string",
+                        "default": "",
+                        "title": "The localtime Schema"
+                    }
+                }
+            },
+            "forecast": {
+                "type": "object",
+                "default": {},
+                "title": "The forecast Schema",
+                "required": [
+                    "forecastday"
+                ],
+                "properties": {
+                    "forecastday": {
+                        "type": "array",
+                        "default": [],
+                        "title": "The forecastday Schema",
+                        "items": {
+                            "type": "object",
+                            "default": {},
+                            "required": [
+                                "date",
+                                "date_epoch",
+                                "day",
+                                "astro"
+                            ],
+                            "properties": {
+                                "date": {
+                                    "type": "string",
+                                    "default": "",
+                                    "title": "The date Schema"
+                                },
+                                "date_epoch": {
+                                    "type": "integer",
+                                    "default": 0,
+                                    "title": "The date_epoch Schema"
+                                },
+                                "day": {
+                                    "type": "object",
+                                    "default": {},
+                                    "title": "The day Schema",
+                                    "required": [
+                                        "maxtemp_c",
+                                        "maxtemp_f",
+                                        "mintemp_c",
+                                        "mintemp_f",
+                                        "avgtemp_c",
+                                        "avgtemp_f",
+                                        "maxwind_mph",
+                                        "maxwind_kph",
+                                        "totalprecip_mm",
+                                        "totalprecip_in",
+                                        "totalsnow_cm",
+                                        "avgvis_km",
+                                        "avgvis_miles",
+                                        "avghumidity",
+                                        "condition",
+                                        "uv"
+                                    ],
+                                    "properties": {
+                                        "maxtemp_c": {
+                                            "type": "number",
+                                            "default": 0.0,
+                                            "title": "The maxtemp_c Schema"
+                                        },
+                                        "maxtemp_f": {
+                                            "type": "number",
+                                            "default": 0.0,
+                                            "title": "The maxtemp_f Schema"
+                                        },
+                                        "mintemp_c": {
+                                            "type": "number",
+                                            "default": 0.0,
+                                            "title": "The mintemp_c Schema"
+                                        },
+                                        "mintemp_f": {
+                                            "type": "number",
+                                            "default": 0.0,
+                                            "title": "The mintemp_f Schema"
+                                        },
+                                        "avgtemp_c": {
+                                            "type": "number",
+                                            "default": 0.0,
+                                            "title": "The avgtemp_c Schema"
+                                        },
+                                        "avgtemp_f": {
+                                            "type": "number",
+                                            "default": 0.0,
+                                            "title": "The avgtemp_f Schema"
+                                        },
+                                        "maxwind_mph": {
+                                            "type": "number",
+                                            "default": 0.0,
+                                            "title": "The maxwind_mph Schema"
+                                        },
+                                        "maxwind_kph": {
+                                            "type": "number",
+                                            "default": 0.0,
+                                            "title": "The maxwind_kph Schema"
+                                        },
+                                        "totalprecip_mm": {
+                                            "type": "number",
+                                            "default": 0.0,
+                                            "title": "The totalprecip_mm Schema"
+                                        },
+                                        "totalprecip_in": {
+                                            "type": "number",
+                                            "default": 0.0,
+                                            "title": "The totalprecip_in Schema"
+                                        },
+                                        "totalsnow_cm": {
+                                            "type": "number",
+                                            "default": 0.0,
+                                            "title": "The totalsnow_cm Schema"
+                                        },
+                                        "avgvis_km": {
+                                            "type": "number",
+                                            "default": 0.0,
+                                            "title": "The avgvis_km Schema"
+                                        },
+                                        "avgvis_miles": {
+                                            "type": "number",
+                                            "default": 0.0,
+                                            "title": "The avgvis_miles Schema"
+                                        },
+                                        "avghumidity": {
+                                            "type": "number",
+                                            "default": 0.0,
+                                            "title": "The avghumidity Schema"
+                                        },
+                                        "condition": {
+                                            "type": "object",
+                                            "default": {},
+                                            "title": "The condition Schema",
+                                            "required": [
+                                                "text",
+                                                "icon",
+                                                "code"
+                                            ],
+                                            "properties": {
+                                                "text": {
+                                                    "type": "string",
+                                                    "default": "",
+                                                    "title": "The text Schema"
+                                                },
+                                                "icon": {
+                                                    "type": "string",
+                                                    "default": "",
+                                                    "title": "The icon Schema"
+                                                },
+                                                "code": {
+                                                    "type": "integer",
+                                                    "default": 0,
+                                                    "title": "The code Schema"
+                                                }
+                                            }
+                                        },
+                                        "uv": {
+                                            "type": "number",
+                                            "default": 0.0,
+                                            "title": "The uv Schema"
+                                        }
+                                    }
+                                },
+                                "astro": {
+                                    "type": "object",
+                                    "default": {},
+                                    "title": "The astro Schema",
+                                    "required": [
+                                        "sunrise",
+                                        "sunset",
+                                        "moonrise",
+                                        "moonset"
+                                    ],
+                                    "properties": {
+                                        "sunrise": {
+                                            "type": "string",
+                                            "default": "",
+                                            "title": "The sunrise Schema"
+                                        },
+                                        "sunset": {
+                                            "type": "string",
+                                            "default": "",
+                                            "title": "The sunset Schema"
+                                        },
+                                        "moonrise": {
+                                            "type": "string",
+                                            "default": "",
+                                            "title": "The moonrise Schema"
+                                        },
+                                        "moonset": {
+                                            "type": "string",
+                                            "default": "",
+                                            "title": "The moonset Schema"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "sports": {
+        "$schema": "https://json-schema.org/draft/2019-09/schema",
+        "$id": "http://example.com/example.json",
+        "type": "object",
+        "default": {},
+        "title": "Root Schema",
+        "required": [
+            "football",
+            "cricket",
+            "golf"
+        ],
+        "properties": {
+            "football": {
+                "type": "array",
+                "default": [],
+                "title": "The football Schema",
+                "items": {
+                    "type": "object",
+                    "default": {},
+                    "required": [
+                        "stadium",
+                        "country",
+                        "tournament",
+                        "start",
+                        "match"
+                    ],
+                    "properties": {
+                        "stadium": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The stadium Schema"
+                        },
+                        "country": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The country Schema"
+                        },
+                        "region": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The region Schema"
+                        },
+                        "tournament": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The tournament Schema"
+                        },
+                        "start": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The start Schema"
+                        },
+                        "match": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The match Schema"
+                        }
+                    }
+                }
+            },
+            "cricket": {
+                "type": "array",
+                "default": [],
+                "title": "The cricket Schema",
+                "items": {
+                    "type": "object",
+                    "default": {}
+                }
+            },
+            "golf": {
+                "type": "array",
+                "default": [],
+                "title": "The golf Schema",
+                "items": {
+                    "type": "object",
+                    "default": {}
+                }
+            }
+        }
+    }
+}
