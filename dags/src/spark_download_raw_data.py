@@ -8,7 +8,7 @@ from pyspark.sql.functions import udf, col, explode
 from pyspark.sql.types import StructType
 from pyspark.sql import Row
 from dags.src.logger_config import setup_logging
-from dags.src.spark_utils import RAW_ROOT_PATH, DATE
+from dags.src.spark_utils import check_path,RAW_ROOT_PATH, DATE
 from dags.schemas.pyspark_schemas import REQUEST_SCHEMA
 
 load_dotenv()
@@ -52,9 +52,7 @@ def executeRestApiAndSave(method: str, city: str) -> None:
     data = response.json()
     validate_schema(data,method)
     storage_path = f'{RAW_ROOT_PATH}/{method}'
-    check_required_folder(storage_path)
-    path = storage_path + f'/{DATE}'
-    check_required_folder(path)
+    path = check_path(storage_path,DATE)
     persist_on_storage(data, city, path, method)
 
 def validate_schema(data:dict,method:dict):
@@ -67,13 +65,6 @@ def validate_schema(data:dict,method:dict):
     except Exception as e:
         logger.error('There was error while validating the schema.')
         logger.error(f'Error message:{e}')
-
-
-def check_required_folder(path: str) -> None:
-    """Check and create folder if it doesn't exist."""
-    if not os.path.isdir(path):
-        os.mkdir(path)
-        logger.info(f'Folder {path} created.')
 
 def persist_on_storage(data: Dict[str, str],
                        city: str,

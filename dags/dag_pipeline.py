@@ -30,7 +30,7 @@ def data_insertion():
 default_args = {
     'owner': 'Airflow',
     'depends_on_past': False,
-    'start_date': datetime(2024, 1, 10,20,25,0),
+    'start_date': datetime.now(),
     'retries': 1,
     'retry_delay': timedelta(minutes=1),
 }
@@ -38,7 +38,8 @@ default_args = {
 # Create a DAG object
 dag = DAG('complete_pipeline_execution',
           default_args=default_args,
-          schedule='*/5 * * * *'
+          schedule='*/10 * * * *',
+          max_active_runs=1
           ) 
 # Define PythonOperators that will execute the Python scripts sequentially
 download_task = PythonOperator(

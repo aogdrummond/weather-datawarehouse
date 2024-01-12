@@ -8,7 +8,7 @@ logger = setup_logging(__name__)
 logger.propagate = False
 from dotenv import load_dotenv
 load_dotenv()
-DATE: str = datetime.strftime(datetime.now(), '%Y%m%d%H%M')
+DATE: datetime = datetime.now()
 RAW_ROOT_PATH: str = os.getenv('RAW_PATH')
 PROCESSED_ROOT_PATH: str = os.getenv('PROCESSED_PATH')
 
@@ -33,19 +33,12 @@ def save_row(row: str, method: str) -> None:
     """Save row data as JSON."""
     json_sample = json.loads(row)
     city = json_sample['city']
-    create_daily_dir(method)
-    file_name = f"{PROCESSED_ROOT_PATH}/{method}/{DATE}/{city}.json"
+    folder_path = f"{PROCESSED_ROOT_PATH}/{method}"
+    folder_path = check_path(folder_path,DATE)
+    file_name = f'{folder_path}/{city}.json'
     with open(file_name, 'w') as f:
         json.dump(json_sample, f)
         logger.info(f'Saving processed {city} "{method}".')
-
-
-def create_daily_dir(method: str) -> None:
-    """Create a daily directory if it doesn't exist."""
-    dir_path = f"{PROCESSED_ROOT_PATH}/{method}/{DATE}"
-    if not os.path.exists(dir_path):
-        os.mkdir(dir_path)
-        logger.info(f'Daily directory "{dir_path}" created.')
 
 def assemble_files_path(root_path:str, method:str)->str:
     """
@@ -60,9 +53,33 @@ def assemble_files_path(root_path:str, method:str)->str:
     - files_path (str)
     - path_exists (bool)
     """
-    files_path = f"{root_path}/{method}/{DATE}"
+    files_path = f"{root_path}/{method}/{str(DATE.year)}/{str(DATE.month)}/{str(DATE.day)}/{str(DATE.hour)}"
     path_exists = os.path.exists(files_path)
     if not path_exists:
         logger.error(f'Dataset in {files_path} does not exist.')
         
     return files_path, path_exists
+
+def check_path(storage_path,date)->str:
+    """
+    Check the existence of the directory
+    required for storage.
+    """
+
+    check_required_folder(storage_path)
+    path = storage_path + f'/{str(date.year)}'
+    check_required_folder(path)
+    path = path + f'/{str(date.month)}'
+    check_required_folder(path)
+    path = path + f'/{str(date.day)}'
+    check_required_folder(path)
+    path = path + f'/{str(date.hour)}' 
+    check_required_folder(path)
+    return path
+
+
+def check_required_folder(path: str) -> None:
+    """Check and create folder if it doesn't exist."""
+    if not os.path.isdir(path):
+        os.mkdir(path)
+        logger.info(f'Folder {path} created.')
