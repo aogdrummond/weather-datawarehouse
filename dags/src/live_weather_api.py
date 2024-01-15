@@ -1,9 +1,8 @@
-from dotenv import load_dotenv
-from datetime import datetime
 """
 Script to run sample's download conventionally (without using pyspark)
 """
-
+from dotenv import load_dotenv
+from datetime import datetime
 from jsonschema import validate
 import logging
 import requests

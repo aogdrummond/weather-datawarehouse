@@ -1,4 +1,5 @@
 from typing import Union
+from dotenv import load_dotenv
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import col, when, udf, regexp_replace, current_timestamp
 from pyspark.sql.types import TimestampType, IntegerType
@@ -7,7 +8,7 @@ from dags.src.db_connector import DbCursor
 from dags.src.logger_config import setup_logging
 from dags.src.spark_utils import load_dataframe, assemble_files_path, PROCESSED_ROOT_PATH, DATE
 
-from dotenv import load_dotenv
+
 load_dotenv()
 
 logger = setup_logging(__name__)
@@ -33,8 +34,8 @@ def insert_data_in_db(spark) -> None:
         if not path_exists:
             raise ValueError(f'Files path {files_path} does not exist')
         processed_df = load_dataframe(spark, files_path)
-        locations_df = parse_locations_df(processed_df)
-        persist_to_db(locations_df, "locations")
+        new_locations_df = parse_new_locations_df(processed_df)
+        persist_to_db(new_locations_df, "locations")
         weathers_df = parse_weathers_df(processed_df)
         persist_to_db(weathers_df, "weathers")
         logger.info(f'Database insertion succesfully finished for execution {DATE}.')
@@ -44,7 +45,7 @@ def insert_data_in_db(spark) -> None:
         logger.error(e)
 
 
-def parse_locations_df(df: DataFrame) -> DataFrame:
+def parse_new_locations_df(df: DataFrame) -> DataFrame:
     """
     Parse locations data from the original DataFrame.
 
@@ -69,7 +70,7 @@ def parse_locations_df(df: DataFrame) -> DataFrame:
     )
     verify_country_udf = udf(verify_country, IntegerType())
     locations_df_with_country_id = locations_df_with_id.withColumn('country_id',verify_country_udf(locations_df_with_id['country']))
-    locations_df_with_country_id.collect()  #Insert to db
+    locations_df_with_country_id.collect()  #Insert new countries into db
     identified_location_df = locations_df_with_country_id.selectExpr("*", "id is not NULL as is_identified")
     new_locations_df = identified_location_df.filter(col("is_identified") == False)
     insert_locations_df = new_locations_df.drop("id", "is_identified","country").withColumn(

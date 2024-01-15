@@ -9,13 +9,13 @@ logger = setup_logging(__name__)
 logger.propagate = False
 
 WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
-BASE_URL = os.getenv("BASE_URL")
+WEATHER_BASE_URL = os.getenv("WEATHER_BASE_URL")
 COUNTRY_API_ROOT_URL = os.getenv("COUNTRY_API_ROOT_URL")
 
 
 def request_from_weather_api(method, city):
     REQUEST_URL = f"{method}.json?key={WEATHER_API_KEY}&q={city}"
-    FINAL_URL = BASE_URL + REQUEST_URL
+    FINAL_URL = WEATHER_BASE_URL + REQUEST_URL
     response = requests.get(url=FINAL_URL)
 
     if response.status_code != 200:
@@ -47,6 +47,3 @@ def filter_country_data(data: dict) -> dict:
     }
     return filtered_data
 
-
-if __name__ == "__main__":
-    request_country_data("Finland")

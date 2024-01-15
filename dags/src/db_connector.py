@@ -81,17 +81,3 @@ class DbCursor:
         Commits operation's data to the database.
         """
         conn.commit()
-
-
-if __name__ == "__main__":
-    dbcursor = DbCursor()
-    country_data = {
-        "name": "nome",
-        "capital": "capital",
-        "language": "language",
-        "tz_utc": "tz",
-        "region": "region",
-        "continent": "continent",
-    }
-    response = dbcursor.fetch_country("Dominican Republic")
-    print()
