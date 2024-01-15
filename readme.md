@@ -20,12 +20,12 @@ Explain the project's architecture, mentioning key components and their interact
 - ~~Design Database~~
 - ~~Insert transformed data into database~~
 - ~~Implement Airflow to orchestrate~~
-- Documentation
+- ~~Documentation~~
 - Implement all the tasks without spark to compare performance
 - Implement persistance on AWS S3
 - Implement consistency checkpoints
 - Implement AWS SNS to alarm error on consistency.
-- Implement other API methods
+- Implement processing for other API methods
 - Develop module to analyse performance and look for bugs in .log file
 - Cover on tests
 
@@ -122,4 +122,3 @@ Provide code snippets or examples for executing specific functionalities within 
 # Example code for fetching data from the API
 # ...
 ```
-
