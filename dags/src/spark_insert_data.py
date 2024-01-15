@@ -2,6 +2,7 @@ from typing import Union
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import col, when, udf, regexp_replace, current_timestamp
 from pyspark.sql.types import TimestampType, IntegerType
+from dags.src.external_api import request_country_data
 from dags.src.db_connector import DbCursor
 from dags.src.logger_config import setup_logging
 from dags.src.spark_utils import load_dataframe, assemble_files_path, PROCESSED_ROOT_PATH, DATE
@@ -65,6 +66,8 @@ def parse_locations_df(df: DataFrame) -> DataFrame:
             trans_locations_df["long"],
         ),
     )
+    verify_country_udf = udf(verify_country, IntegerType())
+    locations_df_with_country_id = locations_df_with_id.withColumn('country_id',verify_country_udf(locations_df_with_id['country']))
     identified_location_df = locations_df_with_id.selectExpr(
         "*", "id is not NULL as is_identified"
     )
@@ -117,6 +120,17 @@ def verify_location(
     - int: Location ID.
     """
     response = dbcursor.fetch_location(city, lat, long)
+    return response
+
+def verify_country(country:str):
+    """
+    """
+    response = dbcursor.fetch_country(country)
+    if response == None:
+        country_data = request_country_data(country)
+        if country_data != None:
+            dbcursor.insert_country(country_data)
+            response = dbcursor.fetch_country(country)
     return response
 
 

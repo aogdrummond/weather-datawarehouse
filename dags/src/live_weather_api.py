@@ -1,12 +1,14 @@
 from dotenv import load_dotenv
 from datetime import datetime
+"""
+Script to run sample's download conventionally (without using pyspark)
+"""
+
 from jsonschema import validate
 import logging
 import requests
 import json
 import os
-
-#inserir logs
 
 load_dotenv()
 API_KEY = os.getenv("API_KEY")

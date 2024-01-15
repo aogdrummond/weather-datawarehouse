@@ -1,3 +1,6 @@
+"""
+Script to run mannualy any step of workflow pipeline
+"""
 # from live_weather_api import download_live_weather_data
 import os
 from pyspark.sql import  SparkSession
@@ -14,6 +17,6 @@ def setup_spark_session() -> SparkSession:
 if __name__ == "__main__":
 
     spark = setup_spark_session()
-    download_live_weather_data(spark)
-    transform_raw_data(spark)
+    # download_live_weather_data(spark)
+    # transform_raw_data(spark)
     insert_data_in_db(spark)
