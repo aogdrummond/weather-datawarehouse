@@ -38,6 +38,7 @@ def insert_data_in_db(spark) -> None:
         weathers_df = parse_weathers_df(processed_df)
         persist_to_db(weathers_df, "weathers")
         logger.info(f'Database insertion succesfully finished for execution {DATE}.')
+    
     except Exception as e:
         logger.error(f'Error on insertion of {method}.')
         logger.error(e)
@@ -68,11 +69,10 @@ def parse_locations_df(df: DataFrame) -> DataFrame:
     )
     verify_country_udf = udf(verify_country, IntegerType())
     locations_df_with_country_id = locations_df_with_id.withColumn('country_id',verify_country_udf(locations_df_with_id['country']))
-    identified_location_df = locations_df_with_id.selectExpr(
-        "*", "id is not NULL as is_identified"
-    )
+    locations_df_with_country_id.collect()  #Insert to db
+    identified_location_df = locations_df_with_country_id.selectExpr("*", "id is not NULL as is_identified")
     new_locations_df = identified_location_df.filter(col("is_identified") == False)
-    insert_locations_df = new_locations_df.drop("id", "is_identified").withColumn(
+    insert_locations_df = new_locations_df.drop("id", "is_identified","country").withColumn(
         "created_at", current_timestamp()
     )
     return insert_locations_df
@@ -127,10 +127,13 @@ def verify_country(country:str):
     """
     response = dbcursor.fetch_country(country)
     if response == None:
+        logger.info(f"Country '{country}' is not in the table 'locations'. Requesting it to the API.")
         country_data = request_country_data(country)
         if country_data != None:
             dbcursor.insert_country(country_data)
             response = dbcursor.fetch_country(country)
+        else:
+            logger.info(f"Country {country} not available in the countries API.")
     return response
 
 

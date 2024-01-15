@@ -38,15 +38,15 @@ def request_country_data(country):
 
 def filter_country_data(data: dict) -> dict:
     filtered_data = {
-        "continent": data[0].get("continents")[0].replace("'", ""),
-        "tz_utc": data[0].get("timezones")[0].replace("'", ""),
-        "name": data[0].get("name")["common"].replace("'", ""),
-        "region": data[0].get("subregion").replace("'", ""),
-        "language": str(list(data[0].get("languages").values())).replace("'", ""),
-        "capital": data[0].get("capital")[0].replace("'", ""),
+        "continent": data[0].get("continents",[''])[0].replace("'", ""),
+        "tz_utc": data[0].get("timezones",[''])[0].replace("'", "").replace("UTC",""),
+        "name": data[0].get("name",{}).get("common",'').replace("'", ""),
+        "region": data[0].get("subregion",'').replace("'", ""),
+        "language": str(list(data[0].get("languages").values())).replace("'", "").replace("[", "").replace("]", ""),
+        "capital": data[0].get("capital",[''])[0].replace("'", ""),
     }
     return filtered_data
 
 
 if __name__ == "__main__":
-    request_country_data("Lebadfnon")
+    request_country_data("Finland")
