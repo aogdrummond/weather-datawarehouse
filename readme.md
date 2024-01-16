@@ -53,7 +53,7 @@ Outline the structure of the project's files and directories:
 ```
 weather-datawarehouse/
 │
-├── __main__.py
+├── Dockerfile
 |
 ├── .env
 |
@@ -62,35 +62,37 @@ weather-datawarehouse/
 ├── requirements.txt
 |
 ├── readme.md
-|
+│
 ├── storage/
 │   ├── raw/
 │   └── processed/
-│
-├── src/
-│   ├── live_weather_api.py
-│   ├── spark_download_raw_data.py
-│   ├── spark_transform_data.py
-│   ├── spark_transform_data.py
-│   ├── spark_utils.py
-│   ├── db_connector.py
-│   └── logger_config.py
-│
-├── schemas/
-│   ├── attributes_mapping.py
-│   ├── cities.json
-│   └── raw_schema.json
+├── dags 
+│   │
+│   ├── src/
+│   │   ├── __init__.py
+│   │   ├── live_weather_api.py
+│   │   ├── spark_download_raw_data.py
+│   │   ├── spark_transform_data.py
+│   │   ├── spark_insert_data.py
+│   │   ├── spark_utils.py
+│   │   ├── db_connector.py
+│   │   ├── external_api.py
+│   │   └── logger_config.py
+│   │
+│   ├── schemas/
+│   │   ├── attributes_mapping.py
+│   │   ├── cities.json
+│   │   ├── pyspark_schemas.py
+│   │   └── raw__data_schema.json
 |
-├── log/
+├── execution_logs/
 │   └── app.log
 |
-├── exploratory_analysis/
-│   └── exploratory_analysis_with_pandas.ipynb
-│
-└── airflow/
-    └── dags/
-        └── airflow_dag.py
+└── exploratory_analysis/
+    └── exploratory_analysis_with_pandas.ipynb
+
 ```
+
 
 # Examples [TO-DO]
 
