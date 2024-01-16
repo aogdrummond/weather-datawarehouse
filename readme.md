@@ -68,22 +68,21 @@ weather-datawarehouse/
 │   └── processed/
 ├── dags 
 │   │
-│   ├── src/
-│   │   ├── __init__.py
-│   │   ├── live_weather_api.py
-│   │   ├── spark_download_raw_data.py
-│   │   ├── spark_transform_data.py
-│   │   ├── spark_insert_data.py
-│   │   ├── spark_utils.py
-│   │   ├── db_connector.py
+│   ├── __init__.py
+│   ├── live_weather_api.py
+│   ├── spark_download_raw_data.py
+│   ├── spark_transform_data.py
+│   ├── spark_insert_data.py
+│   ├── spark_utils.py
+│   ├── db_connector.py
 │   │   ├── external_api.py
 │   │   └── logger_config.py
 │   │
-│   ├── schemas/
-│   │   ├── attributes_mapping.py
-│   │   ├── cities.json
-│   │   ├── pyspark_schemas.py
-│   │   └── raw__data_schema.json
+│   └── schemas/
+│       ├── attributes_mapping.py
+│       ├── cities.json
+│       ├── pyspark_schemas.py
+│       └── raw__data_schema.json
 |
 ├── execution_logs/
 │   └── app.log
