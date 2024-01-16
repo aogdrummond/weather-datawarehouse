@@ -38,8 +38,9 @@ default_args = {
 # Create a DAG object
 dag = DAG('complete_pipeline_execution',
           default_args=default_args,
-          schedule='*/10 * * * *',
-          max_active_runs=1
+          schedule='0 * * * *',
+          max_active_runs=1,
+          catchup=False
           ) 
 # Define PythonOperators that will execute the Python scripts sequentially
 download_task = PythonOperator(

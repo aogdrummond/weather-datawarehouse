@@ -46,10 +46,11 @@ def executeRestApiAndSave(method: str, city: str) -> None:
     """Execute REST API request and save data."""
 
     data = request_from_weather_api(method, city)
-    validate_schema(data, method)
-    storage_path = f"{RAW_ROOT_PATH}/{method}"
-    path = check_path(storage_path, DATE)
-    persist_on_storage(data, city, path, method)
+    if data:
+        validate_schema(data, method)
+        storage_path = f"{RAW_ROOT_PATH}/{method}"
+        path = check_path(storage_path, DATE)
+        persist_on_storage(data, city, path, method)
 
 
 def validate_schema(data: dict, method: dict):

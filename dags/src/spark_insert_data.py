@@ -125,16 +125,23 @@ def verify_location(
 
 def verify_country(country:str):
     """
+    Verify the existence of a country in the database. If the country is not found, 
+    retrieve its data through an external API, insert it into the database, and 
+    then fetch and return the country's information.
+
+    Parameters:
+    - country (str): The name of the country to be verified.
+
+    Returns:
+    - dict: A dictionary containing the information of the specified country. 
+            If the country is not found or an error occurs, returns None.
     """
     response = dbcursor.fetch_country(country)
     if response == None:
-        logger.info(f"Country '{country}' is not in the table 'locations'. Requesting it to the API.")
         country_data = request_country_data(country)
         if country_data != None:
             dbcursor.insert_country(country_data)
             response = dbcursor.fetch_country(country)
-        else:
-            logger.info(f"Country {country} not available in the countries API.")
     return response
 
 
