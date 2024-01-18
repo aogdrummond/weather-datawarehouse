@@ -21,7 +21,7 @@ Explain the project's architecture, mentioning key components and their interact
 - ~~Insert transformed data into database~~
 - ~~Implement Airflow to orchestrate~~
 - ~~Documentation~~
-- Implement all the tasks without spark to compare performance
+- ~~Implement all the tasks without spark to compare performance~~
 - Implement persistance on AWS S3
 - Implement consistency checkpoints
 - Implement AWS SNS to alarm error on consistency.
